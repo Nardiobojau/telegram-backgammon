@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import './styles.css';
 
 export default function Home() {
-  const [tg, setTg] = useState(null); // Telegram WebApp API
+  //const [tg, setTg] = useState(null); // Telegram WebApp API
   const [user, setUser] = useState(null);
   const [dice, setDice] = useState([1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(1);
