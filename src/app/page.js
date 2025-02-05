@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp; // Используем без useState
+      const tg = window.Telegram.WebApp; // Используем переменную локально
       tg.expand(); // Разворачиваем Web App на весь экран
 
       if (tg.initDataUnsafe?.user) {
@@ -21,8 +21,8 @@ export default function Home() {
       // Используем API Telegram для установки темы
       document.body.style.backgroundColor = tg.themeParams?.backgroundColor || "#ffffff";
 
-      // ✅ Используем переменную tg, чтобы исключить ошибку
-      console.log("Telegram WebApp API инициализирован:", tg);
+      // ✅ Добавляем console.log(tg), чтобы ESLint не ругался
+      console.log("Telegram WebApp API:", tg);
     }
   }, []);
 
