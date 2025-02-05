@@ -11,18 +11,14 @@ export default function Home() {
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp; // Используем переменную локально
-      tg.expand(); // Разворачиваем Web App на весь экран
+      window.Telegram.WebApp.expand(); // Разворачиваем Web App на весь экран
 
-      if (tg.initDataUnsafe?.user) {
-        setUser(tg.initDataUnsafe.user);
+      if (window.Telegram.WebApp.initDataUnsafe?.user) {
+        setUser(window.Telegram.WebApp.initDataUnsafe.user);
       }
 
       // Используем API Telegram для установки темы
-      document.body.style.backgroundColor = tg.themeParams?.backgroundColor || "#ffffff";
-
-      // ✅ Добавляем console.log(tg), чтобы ESLint не ругался
-      console.log("Telegram WebApp API:", tg);
+      document.body.style.backgroundColor = window.Telegram.WebApp.themeParams?.backgroundColor || "#ffffff";
     }
   }, []);
 
