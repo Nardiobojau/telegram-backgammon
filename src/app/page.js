@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import './styles.css';
 
 export default function Home() {
-  //const [tg, setTg] = useState(null); // Telegram WebApp API
   const [user, setUser] = useState(null);
   const [dice, setDice] = useState([1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -13,18 +12,13 @@ export default function Home() {
   useEffect(() => {
     if (window.Telegram?.WebApp) {
       const telegram = window.Telegram.WebApp;
-      setTg(telegram);
       telegram.expand(); // Разворачиваем Web App на весь экран
 
       if (telegram.initDataUnsafe?.user) {
         setUser(telegram.initDataUnsafe.user);
       }
 
-      // ✅ Используем `tg` в коде, чтобы ESLint не выдавал ошибку
-      setTg((prevTg) => {
-        prevTg?.showAlert("WebApp загружен в Telegram!");
-        return prevTg;
-      });
+      telegram.showAlert("WebApp загружен в Telegram!");
 
       // Установка цвета фона в зависимости от темы Telegram
       document.body.style.backgroundColor = telegram.themeParams?.backgroundColor || "#ffffff";
