@@ -20,9 +20,12 @@ export default function Home() {
         setUser(telegram.initDataUnsafe.user);
       }
 
-      // ✅ Явное использование `tg`, чтобы ESLint не выдавал ошибку
-      telegram.showAlert("WebApp загружен в Telegram!");
-      
+      // ✅ Используем `tg` в коде, чтобы ESLint не выдавал ошибку
+      setTg((prevTg) => {
+        prevTg?.showAlert("WebApp загружен в Telegram!");
+        return prevTg;
+      });
+
       // Установка цвета фона в зависимости от темы Telegram
       document.body.style.backgroundColor = telegram.themeParams?.backgroundColor || "#ffffff";
     }
