@@ -1,0 +1,5 @@
+{
+  "builds": [
+    { "src": "styles.css", "use": "@vercel/static" }
+  ]
+}
