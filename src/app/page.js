@@ -6,7 +6,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [dice, setDice] = useState([1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(1);
-  const [player1Pieces, setPlayer1Pieces] = useState([0, 1, 2, 3, 4, 5]);
+  const [player1Pieces, setPlayer1Pieces] = useState([0, 1, 2, 3, 4]);
   const [player2Pieces, setPlayer2Pieces] = useState([23, 22, 21, 20, 19]);
   const [selectedPiece, setSelectedPiece] = useState(null);
 
@@ -28,14 +28,14 @@ export default function Home() {
   };
 
   const handlePieceClick = (index, player) => {
-    if (currentPlayer !== player) return; // Блокируем ход не своего игрока
+    if (currentPlayer !== player) return; // Ходит только текущий игрок
     setSelectedPiece(index);
   };
 
   const handleMove = () => {
     if (selectedPiece === null) return;
 
-    const steps = dice[0]; // Пока используем только один кубик
+    const steps = dice[0]; // Пока используем только первый кубик
     let newPositions;
 
     if (currentPlayer === 1) {
@@ -43,7 +43,7 @@ export default function Home() {
       newPositions[selectedPiece] += steps;
 
       if (newPositions[selectedPiece] > 23) {
-        newPositions[selectedPiece] = 23; // Ограничение на выход за край поля
+        newPositions[selectedPiece] = 23;
       }
 
       setPlayer1Pieces(newPositions);
@@ -52,19 +52,19 @@ export default function Home() {
       newPositions[selectedPiece] -= steps;
 
       if (newPositions[selectedPiece] < 0) {
-        newPositions[selectedPiece] = 0; // Ограничение на выход за край поля
+        newPositions[selectedPiece] = 0;
       }
 
       setPlayer2Pieces(newPositions);
     }
 
     setSelectedPiece(null);
-    setCurrentPlayer(currentPlayer === 1 ? 2 : 1); // Передаём ход
+    setCurrentPlayer(currentPlayer === 1 ? 2 : 1); // Смена хода
   };
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Добро пожаловать в нарды!</h1>
+      <h1>Нарды</h1>
       {user ? <p>Вы играете как {user.first_name} {user.last_name}</p> : <p>Не удалось получить данные пользователя</p>}
 
       <div className="board">
