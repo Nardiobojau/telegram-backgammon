@@ -1,46 +1,66 @@
-body {
-    background-color: lightgray; /* Проверка работы стилей */
-  }
-  
-  .board {
+.game-container {
+    text-align: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.board {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    margin: 20px auto;
-    width: 80%;
-    height: 200px;
+    width: 600px;
+    height: 300px;
     background-color: #d5b185;
-    border: 2px solid #4e2d0b;
-    border-radius: 8px;
-    border: 5px solid red; /* Проверочная красная граница */
-  }
-  
-  .player-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    border: 5px solid #4e2d0b;
+    border-radius: 10px;
+    margin: 20px auto;
     position: relative;
-    width: 50%;
-  }
-  
-  .chip {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin: 5px;
-    position: absolute;
-  }
-  
-  .dice-roll {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  button {
     padding: 10px;
+}
+
+.triangle {
+    width: 25px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+}
+
+.triangle.light {
+    background-color: #f4c27d;
+}
+
+.triangle.dark {
+    background-color: #a56a3a;
+}
+
+.chip {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.red {
+    background-color: red;
+}
+
+.selected {
+    border: 3px solid yellow;
+}
+
+.dice-roll {
     margin-top: 10px;
+}
+
+button {
+    padding: 10px;
+    margin: 10px;
     font-size: 16px;
     cursor: pointer;
-  }
+}
