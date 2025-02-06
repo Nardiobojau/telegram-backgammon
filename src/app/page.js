@@ -6,18 +6,18 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [dice, setDice] = useState([1, 1]);
   const [currentPlayer, setCurrentPlayer] = useState(1);
-  const [player1Pieces, setPlayer1Pieces] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-  const [player2Pieces, setPlayer2Pieces] = useState([23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9]);
+  const [player1Pieces, setPlayer1Pieces] = useState([0, 1, 2, 3, 4, 5]);
+  const [player2Pieces, setPlayer2Pieces] = useState([23, 22, 21, 20, 19]);
+  const [selectedPiece, setSelectedPiece] = useState(null);
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.expand(); // Разворачиваем Web App на весь экран
+      window.Telegram.WebApp.expand();
 
       if (window.Telegram.WebApp.initDataUnsafe?.user) {
         setUser(window.Telegram.WebApp.initDataUnsafe.user);
       }
 
-      // Используем API Telegram для установки темы
       document.body.style.backgroundColor = window.Telegram.WebApp.themeParams?.backgroundColor || "#ffffff";
     }
   }, []);
@@ -25,46 +25,74 @@ export default function Home() {
   const rollDice = () => {
     const randomDice = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
     setDice(randomDice);
+  };
 
-    const steps = randomDice[0];
+  const handlePieceClick = (index, player) => {
+    if (currentPlayer !== player) return; // Блокируем ход не своего игрока
+    setSelectedPiece(index);
+  };
+
+  const handleMove = () => {
+    if (selectedPiece === null) return;
+
+    const steps = dice[0]; // Пока используем только один кубик
+    let newPositions;
 
     if (currentPlayer === 1) {
-      const newPlayer1Pieces = [...player1Pieces];
-      newPlayer1Pieces[0] += steps;
-      setPlayer1Pieces(newPlayer1Pieces);
+      newPositions = [...player1Pieces];
+      newPositions[selectedPiece] += steps;
+
+      if (newPositions[selectedPiece] > 23) {
+        newPositions[selectedPiece] = 23; // Ограничение на выход за край поля
+      }
+
+      setPlayer1Pieces(newPositions);
     } else {
-      const newPlayer2Pieces = [...player2Pieces];
-      newPlayer2Pieces[0] += steps;
-      setPlayer2Pieces(newPlayer2Pieces);
+      newPositions = [...player2Pieces];
+      newPositions[selectedPiece] -= steps;
+
+      if (newPositions[selectedPiece] < 0) {
+        newPositions[selectedPiece] = 0; // Ограничение на выход за край поля
+      }
+
+      setPlayer2Pieces(newPositions);
     }
 
-    setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+    setSelectedPiece(null);
+    setCurrentPlayer(currentPlayer === 1 ? 2 : 1); // Передаём ход
   };
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Добро пожаловать в игру в нарды!</h1>
-      {user ? (
-        <p>Вы авторизованы как {user.first_name} {user.last_name}</p>
-      ) : (
-        <p>Не удалось получить данные пользователя</p>
-      )}
+      <h1>Добро пожаловать в нарды!</h1>
+      {user ? <p>Вы играете как {user.first_name} {user.last_name}</p> : <p>Не удалось получить данные пользователя</p>}
 
       <div className="board">
         <div className="player-side">
           {player1Pieces.map((pos, idx) => (
-            <div key={idx} className="chip" style={{ backgroundColor: "blue", bottom: `${(pos % 12) * 8}%`, left: `${Math.floor(pos / 12) * 50}%` }}></div>
+            <div 
+              key={idx} 
+              className={`chip ${selectedPiece === idx && currentPlayer === 1 ? "selected" : ""}`}
+              style={{ backgroundColor: "blue", bottom: `${(pos % 12) * 8}%`, left: `${Math.floor(pos / 12) * 50}%` }}
+              onClick={() => handlePieceClick(idx, 1)}
+            ></div>
           ))}
         </div>
 
         <div className="dice-roll">
           <button onClick={rollDice}>Бросить кубики</button>
           <p>Кубики: {dice[0]} и {dice[1]}</p>
+          <button onClick={handleMove} disabled={selectedPiece === null}>Сделать ход</button>
         </div>
 
         <div className="player-side">
           {player2Pieces.map((pos, idx) => (
-            <div key={idx} className="chip" style={{ backgroundColor: "red", bottom: `${(pos % 12) * 8}%`, left: `${Math.floor(pos / 12) * 50}%` }}></div>
+            <div 
+              key={idx} 
+              className={`chip ${selectedPiece === idx && currentPlayer === 2 ? "selected" : ""}`}
+              style={{ backgroundColor: "red", bottom: `${(pos % 12) * 8}%`, left: `${Math.floor(pos / 12) * 50}%` }}
+              onClick={() => handlePieceClick(idx, 2)}
+            ></div>
           ))}
         </div>
       </div>
